@@ -20,7 +20,8 @@ const userSchema = mongoose.Schema({
     },
     photo:{
         type: String,
-        required: [true, "Please add a photo"]
+        required: [true, "Please add a photo"],
+        default: "https://www.pexels.com/photo/woman-in-black-spaghetti-strap-dress-holding-blue-scarf-14395818/"
     },
     phone:{
         type: String
