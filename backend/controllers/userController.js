@@ -6,6 +6,7 @@ const generateToken = (id)=>{
   return jwt.sign({id}, process.env.JWT_SECRET, {expiresIn: "1d"});
 };
 
+//register user
 const registerUser = asyncHandler( async (req,res)=>{
     const {name, email, password} = req.body
     
@@ -37,6 +38,15 @@ const registerUser = asyncHandler( async (req,res)=>{
   //generate token
   const token = generateToken(user._id);
 
+  //send HTTP-only cookie
+  res.cookie("token", token, {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(Date.now() + 86400),
+    sameSite: "none",
+    secure: true,
+  });
+
   if(user) {
     const {_id, name, email, photo, phone, bio} = user
     res.status(201).json({
@@ -48,7 +58,12 @@ const registerUser = asyncHandler( async (req,res)=>{
   }
 });
 
+//login user
+const loginUser = asyncHandler( async (req,res) => {
+  res.send("login user");
+});
 
 module.exports = {
     registerUser,
+    loginUser,
 }
