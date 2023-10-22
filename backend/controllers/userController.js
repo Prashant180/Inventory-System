@@ -85,7 +85,7 @@ const loginUser = asyncHandler( async (req,res) => {
     res.cookie("token", token, {
       path: "/",
       httpOnly: true,
-      expires: new Date(Date.now() + 86400),
+      expires: new Date(Date.now() + 600*1000),
       sameSite: "none",
       secure: true,
     });
@@ -133,9 +133,36 @@ const getUser = asyncHandler(async (req,res) => {
 
 });
 
+//get login status
+
+const loginStatus = asyncHandler (async (req,res)=> {
+
+  const token = req.cookies.token;
+  if (!token){
+    return res.json(false);
+  }
+  
+  //verify token
+  const verified = jwt.verify(token, process.env.JWT_SECRET);
+  if (verified) {
+    return res.json(true);
+  } else {
+    return res.json(false);
+  }
+
+});
+
+//Update user
+
+const updateUser = asyncHandler (async (req,res)=>{
+  res.send("User Updated")
+});
+
 module.exports = {
     registerUser,
     loginUser,
     logout,
     getUser,
+    loginStatus,
+    updateUser,
 }
